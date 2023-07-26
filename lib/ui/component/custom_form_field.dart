@@ -15,16 +15,21 @@ class CustomFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      decoration: InputDecoration(
-        labelText: label,
-        suffixIcon: suffix,
-      ),
       obscureText: isPassword,
       controller: controller,
       keyboardType: textInputType,
       minLines: lines,
       maxLines: lines,
       validator: validator,
+      decoration: InputDecoration(
+        labelStyle:TextStyle(
+          fontWeight: FontWeight.normal,
+          color: Colors.black,
+          fontSize: 15
+        ),
+        labelText: label,
+        suffixIcon: suffix,
+      ),
     );
   }
 }

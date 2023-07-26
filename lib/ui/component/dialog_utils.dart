@@ -48,7 +48,9 @@ class DialogUtils{
     showDialog(context: context,
         builder: (buildContext){
           return AlertDialog(
-              content: Text(message),
+              content: Text(message,style: TextStyle(
+                color: Colors.black
+              ),),
               actions: actions
           );
         },

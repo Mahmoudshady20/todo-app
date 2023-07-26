@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/database/model/myuser.dart';
 import 'package:todo/database/mydatabase.dart';
@@ -7,6 +8,7 @@ import 'package:todo/provider/auth_provider.dart';
 import 'package:todo/ui/component/custom_form_field.dart';
 import 'package:todo/ui/component/dialog_utils.dart';
 import 'package:todo/ui/component/validations_regex.dart';
+import 'package:todo/ui/home_screen/home_screen.dart';
 import 'package:todo/ui/login_screen/loginscreen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -31,8 +33,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: const BoxDecoration(
-          color: Color(0xFFDFECDB),
+      decoration: BoxDecoration(
+          color: Theme.of(context).hintColor,
           image: DecorationImage(
             image: AssetImage(
               'assets/images/background.png',
@@ -135,11 +137,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onPressed: () {
                       register();
                     },
-                    child: const Row(
+                    child:const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Register',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Icon(Icons.arrow_forward)
+                      ],
+                    )),
+                SizedBox(
+                  height: 15,
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      signInWithGoogle();
+                    },
+                    child:const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Register By Google',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
@@ -151,10 +171,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Navigator.pushReplacementNamed(
                           context, LoginScreen.routeName);
                     },
-                    child: const Text(
+                    child:  Text(
                       'Already Have Account?',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:Theme.of(context).textTheme.labelSmall,
                     )),
               ],
             ),
@@ -211,5 +230,28 @@ FirebaseAuth authServices = FirebaseAuth.instance;
           }
       );
     }
+  }
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+  Future<void> signInWithGoogle() async {
+    print('1050505050');
+    GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+    print('2050505050');
+    GoogleSignInAuthentication googleSignInAuthentication =
+    await googleSignInAccount!.authentication;
+    print('3050505050');
+    AuthCredential authCredential = GoogleAuthProvider.credential(
+        idToken: googleSignInAuthentication.idToken,
+        accessToken: googleSignInAuthentication.accessToken);
+    UserCredential authResult = await authServices.signInWithCredential(authCredential);
+    User user = await authServices.currentUser!;
+    MyUser myUser = MyUser(
+      email: user.email,
+      id: user.uid,
+    );
+    await MyDataBase.addUser(myUser);
+    print('user email = ${myUser.email}');
+    var provider = Provider.of<AuthProvider>(context,listen: false);
+    provider.updateUser(myUser);
+    Navigator.pushReplacementNamed(context,HomeScreen.routeName);
   }
 }

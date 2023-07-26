@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo/database/mydatabase.dart';
 import 'package:todo/provider/auth_provider.dart';
+import 'package:todo/provider/settings_provider.dart';
 import 'package:todo/ui/home_screen/home_screen.dart';
 import 'package:todo/ui/login_screen/loginscreen.dart';
 
@@ -16,13 +16,14 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
+    var setting =Provider.of<SettingsProvider>(context);
     Future.delayed(Duration(seconds: 2),(){
       login();
     });
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/splash.png'), fit: BoxFit.fill)),
+              image: AssetImage(setting.themeMode == ThemeMode.light ? 'assets/images/splash.png' : 'assets/images/splashdark.png'), fit: BoxFit.fill)),
     );
   }
 

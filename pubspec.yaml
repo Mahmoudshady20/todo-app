@@ -39,6 +39,14 @@ dependencies:
   firebase_auth: ^4.7.1
   cloud_firestore: ^4.8.3
   provider: ^6.0.5
+  shared_preferences: ^2.2.0
+  flutter_slidable: ^3.0.0
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  table_calendar: ^3.0.9
+  google_sign_in: ^6.1.4
+
 
 dev_dependencies:
   flutter_test:
@@ -61,7 +69,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  generate: true
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
@@ -92,3 +100,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
